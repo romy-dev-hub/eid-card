@@ -74,6 +74,8 @@ function createFloatingEmojis() {
 }
 
 // Universal share function 
+//failed to solve the error of sharing
+/*
 function shareCard() {
     const text = encodeURIComponent('Eid Mubarak! Wishing you a blessed Eid');
     const url = encodeURIComponent(window.location.href);
@@ -92,6 +94,7 @@ function shareCard() {
     `
     document.body.insertAdjacentHTML('beforeend', shareLinks);
 }
+*/
 
 /*
 function showShareOptions() {
@@ -187,6 +190,40 @@ function copyToClipboard() {
 }
 
 */
+
+function copyLink(){
+    const link = "https://romy-dev-hub.github.io/eid-card/";
+
+    //create temp input element
+    const tempInput = document.createElement('input');
+    tempInput.value = link;
+    document.body.appendChild(tempInput);
+
+    //select and copy the link
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+
+    //show a confirmation message
+    const toast = document.createElement('div');
+    toast.textContent = 'Link copied to clipboard!';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = '#0a3d62';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '20px';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
+
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     createStars('stars', 1);
