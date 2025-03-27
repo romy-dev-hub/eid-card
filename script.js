@@ -1,5 +1,6 @@
-//code here
+//code here 
 
+// Star creation for both card and background
 function createStars(containerId, countMultiplier = 1) {
     const starsContainer = document.getElementById(containerId);
     const baseCount = window.innerWidth < 768 ? 40 : 50;
@@ -13,7 +14,6 @@ function createStars(containerId, countMultiplier = 1) {
         star.style.animationDelay = `${Math.random() * 1.5}s`;
         star.style.opacity = `${0.1 + Math.random() * 0.9}`;
         
-        // 10% chance to be a shooting star (background only)
         if (containerId === 'emojiBackground' && Math.random() > 0.9) {
             star.classList.add('shooting-star');
             star.style.animationDelay = `${Math.random() * 10}s`;
@@ -23,6 +23,7 @@ function createStars(containerId, countMultiplier = 1) {
     }
 }
 
+// Particle effects for card flip
 function createParticles() {
     const particlesContainer = document.getElementById('particles');
     const particleCount = window.innerWidth < 768 ? 20 : 30;
@@ -41,6 +42,7 @@ function createParticles() {
     }
 }
 
+// Card flip animation
 function flipCard() {
     const card = document.querySelector('.card-container');
     const message = document.getElementById('message');
@@ -52,37 +54,7 @@ function flipCard() {
     }
 }
 
-function shareCard(e) {
-    e.stopPropagation();
-    console.log("Share function triggered"); // Debug log
-    
-    if (navigator.share) {
-        console.log("Web Share API supported");
-        navigator.share({
-            title: 'Eid Mubarak Greetings',
-            text: 'Wishing you a blessed Eid!',
-            url: window.location.href
-        }).catch(err => {
-            console.error('Error sharing:', err); // Log errors
-            copyToClipboard(); // Fallback
-        });
-    } else {
-        console.log("Web Share API not supported, using fallback");
-        copyToClipboard(); // Fallback to clipboard
-    }
-}
-
-function copyToClipboard() {
-    const dummy = document.createElement('textarea');
-    document.body.appendChild(dummy);
-    dummy.value = window.location.href;
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    
-    alert('Link copied to clipboard! You can now share it.');
-}
-
+// Floating emojis for background
 function createFloatingEmojis() {
     const emojiContainer = document.getElementById('emojiBackground');
     const emojis = ['🌙', '🌟', '✨', '🕌', '☪️', '🕋', '🪔'];
@@ -101,14 +73,120 @@ function createFloatingEmojis() {
     }
 }
 
-// Initialize everything when DOM is loaded
+// Universal share function with Messenger support
+function shareCard(e) {
+    e.stopPropagation();
+    
+    if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        navigator.share({
+            title: 'Eid Mubarak Greetings',
+            text: 'Wishing you a blessed Eid!',
+            url: window.location.href
+        }).catch(() => showShareOptions());
+    } else {
+        showShareOptions();
+    }
+}
+
+function showShareOptions() {
+    const shareDialog = document.createElement('div');
+    shareDialog.style.position = 'fixed';
+    shareDialog.style.top = '0';
+    shareDialog.style.left = '0';
+    shareDialog.style.width = '100%';
+    shareDialog.style.height = '100%';
+    shareDialog.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    shareDialog.style.zIndex = '1000';
+    shareDialog.style.display = 'flex';
+    shareDialog.style.flexDirection = 'column';
+    shareDialog.style.justifyContent = 'center';
+    shareDialog.style.alignItems = 'center';
+    
+    shareDialog.innerHTML = `
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 90%;">
+            <h3 style="color: #0a3d62; margin-bottom: 15px;">Share Eid Greetings</h3>
+            <button onclick="shareVia('whatsapp')" style="background: #25D366; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </button>
+            <button onclick="shareVia('facebook')" style="background: #4267B2; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+                <i class="fab fa-facebook"></i> Facebook
+            </button>
+            <button onclick="shareVia('messenger')" style="background: #006AFF; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+                <i class="fab fa-facebook-messenger"></i> Messenger
+            </button>
+            <button onclick="copyToClipboard()" style="background: #0a3d62; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+                <i class="fas fa-copy"></i> Copy Link
+            </button>
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin-top: 10px; cursor: pointer; width: 100%;">
+                Close
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(shareDialog);
+}
+
+function shareVia(platform) {
+    const text = 'Eid Mubarak! Wishing you a blessed Eid. Check out this greeting card: ';
+    const url = window.location.href;
+    const encodedText = encodeURIComponent(text);
+    const encodedUrl = encodeURIComponent(url);
+    
+    let shareUrl = '';
+    switch(platform) {
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${encodedText}${encodedUrl}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+            break;
+        case 'messenger':
+            shareUrl = `fb-messenger://share/?link=${encodedUrl}`;
+            setTimeout(() => {
+                if(!document.hidden) {
+                    window.open(`https://www.facebook.com/dialog/send?app_id=YOUR_APP_ID&link=${encodedUrl}&redirect_uri=${encodedUrl}`, '_blank');
+                }
+            }, 250);
+            break;
+    }
+    
+    window.open(shareUrl, '_blank');
+    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
+}
+
+function copyToClipboard() {
+    const dummy = document.createElement('textarea');
+    dummy.value = window.location.href;
+    document.body.appendChild(dummy);
+    dummy.select();
+    document.execCommand('copy');
+    document.body.removeChild(dummy);
+    
+    const toast = document.createElement('div');
+    toast.textContent = 'Link copied to clipboard!';
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = '#0a3d62';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '20px';
+    toast.style.zIndex = '1000';
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
+}
+
+// Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
-    createStars('stars', 1); // Front card stars
-    createStars('emojiBackground', 3); // Background stars (3x more)
+    createStars('stars', 1);
+    createStars('emojiBackground', 3);
     createFloatingEmojis();
 });
 
-// Add touch support
+// Touch support
 document.querySelector('.card-container').addEventListener('touchstart', function(e) {
     e.preventDefault();
     flipCard();
