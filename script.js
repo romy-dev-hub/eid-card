@@ -54,17 +54,21 @@ function flipCard() {
 
 function shareCard(e) {
     e.stopPropagation();
+    console.log("Share function triggered"); // Debug log
+    
     if (navigator.share) {
+        console.log("Web Share API supported");
         navigator.share({
             title: 'Eid Mubarak Greetings',
             text: 'Wishing you a blessed Eid!',
             url: window.location.href
         }).catch(err => {
-            console.log('Error sharing:', err);
-            copyToClipboard();
+            console.error('Error sharing:', err); // Log errors
+            copyToClipboard(); // Fallback
         });
     } else {
-        copyToClipboard();
+        console.log("Web Share API not supported, using fallback");
+        copyToClipboard(); // Fallback to clipboard
     }
 }
 
