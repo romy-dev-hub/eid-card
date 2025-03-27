@@ -77,18 +77,24 @@ function createFloatingEmojis() {
 function shareCard(e) {
     e.stopPropagation();
     
-    if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // Always show the share options on mobile (bypass Web Share API)
+    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        showShareOptions();
+    } 
+    // Use Web Share API only on supported browsers (Desktop Chrome/Edge)
+    else if (navigator.share) {
         navigator.share({
             title: 'Eid Mubarak Greetings',
             text: 'Wishing you a blessed Eid!',
             url: window.location.href
-        }).catch(() => showShareOptions());
+        }).catch(() => showShareOptions()); // Fallback if Web Share fails
     } else {
-        showShareOptions();
+        showShareOptions(); // Fallback for unsupported browsers
     }
 }
 
 function showShareOptions() {
+    // Create share dialog
     const shareDialog = document.createElement('div');
     shareDialog.style.position = 'fixed';
     shareDialog.style.top = '0';
@@ -101,58 +107,58 @@ function showShareOptions() {
     shareDialog.style.flexDirection = 'column';
     shareDialog.style.justifyContent = 'center';
     shareDialog.style.alignItems = 'center';
-    
+
     shareDialog.innerHTML = `
-        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 90%;">
-            <h3 style="color: #0a3d62; margin-bottom: 15px;">Share Eid Greetings</h3>
-            <button onclick="shareVia('whatsapp')" style="background: #25D366; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; width: 80%; max-width: 300px;">
+            <h3 style="color: #0a3d62; margin-bottom: 15px; font-size: 1.2rem;">Share Eid Greetings</h3>
+            <button onclick="shareVia('whatsapp')" style="background: #25D366; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
                 <i class="fab fa-whatsapp"></i> WhatsApp
             </button>
-            <button onclick="shareVia('facebook')" style="background: #4267B2; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
-                <i class="fab fa-facebook"></i> Facebook
-            </button>
-            <button onclick="shareVia('messenger')" style="background: #006AFF; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+            <button onclick="shareVia('messenger')" style="background: #006AFF; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
                 <i class="fab fa-facebook-messenger"></i> Messenger
             </button>
-            <button onclick="copyToClipboard()" style="background: #0a3d62; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin: 5px; cursor: pointer; width: 100%;">
+            <button onclick="shareVia('facebook')" style="background: #4267B2; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
+                <i class="fab fa-facebook"></i> Facebook
+            </button>
+            <button onclick="copyToClipboard()" style="background: #0a3d62; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
                 <i class="fas fa-copy"></i> Copy Link
             </button>
-            <button onclick="this.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 10px 15px; border-radius: 5px; margin-top: 10px; cursor: pointer; width: 100%;">
+            <button onclick="this.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 15px; width: 100%; font-size: 1rem; cursor: pointer;">
                 Close
             </button>
         </div>
     `;
-    
+
     document.body.appendChild(shareDialog);
 }
 
 function shareVia(platform) {
-    const text = 'Eid Mubarak! Wishing you a blessed Eid. Check out this greeting card: ';
+    const text = 'Eid Mubarak! 🌙 Wishing you a blessed Eid. Check this greeting card: ';
     const url = window.location.href;
-    const encodedText = encodeURIComponent(text);
-    const encodedUrl = encodeURIComponent(url);
     
-    let shareUrl = '';
+    let shareUrl;
     switch(platform) {
         case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${encodedText}${encodedUrl}`;
-            break;
-        case 'facebook':
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+            shareUrl = `https://wa.me/?text=${encodeURIComponent(text + url)}`;
             break;
         case 'messenger':
-            shareUrl = `fb-messenger://share/?link=${encodedUrl}`;
+            shareUrl = `fb-messenger://share/?link=${encodeURIComponent(url)}`;
+            // Fallback to Facebook if Messenger app not installed
             setTimeout(() => {
-                if(!document.hidden) {
-                    window.open(`https://www.facebook.com/dialog/send?app_id=YOUR_APP_ID&link=${encodedUrl}&redirect_uri=${encodedUrl}`, '_blank');
+                if (!document.hidden) {
+                    window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&redirect_uri=${encodeURIComponent(url)}`, '_blank');
                 }
             }, 250);
             break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
     }
-    
+
     window.open(shareUrl, '_blank');
     document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
 }
+
 
 function copyToClipboard() {
     const dummy = document.createElement('textarea');
