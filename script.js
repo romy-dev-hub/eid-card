@@ -74,25 +74,26 @@ function createFloatingEmojis() {
 }
 
 // Universal share function 
-function shareCard(e) {
-    e.stopPropagation();
-    
-    // Always show the share options on mobile (bypass Web Share API)
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        showShareOptions();
-    } 
-    // Use Web Share API only on supported browsers (Desktop Chrome/Edge)
-    else if (navigator.share) {
-        navigator.share({
-            title: 'Eid Mubarak Greetings',
-            text: 'Wishing you a blessed Eid!',
-            url: window.location.href
-        }).catch(() => showShareOptions()); // Fallback if Web Share fails
-    } else {
-        showShareOptions(); // Fallback for unsupported browsers
-    }
+function shareCard() {
+    const text = encodeURIComponent('Eid Mubarak! Wishing you a blessed Eid');
+    const url = encodeURIComponent(window.location.href);
+
+    //show a popup with share options
+    const shareLinks = `
+       <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; padding: 20px;">
+                <h3 style="margin-bottom: 15px; color: #0a3d62;">Share Eid Greetings</h3>
+                <a href="https://wa.me/?text=${text}%20${url}" target="_blank" style="display: block; margin: 10px 0; background: #25D366; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">WhatsApp</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" style="display: block; margin: 10px 0; background: #4267B2; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">Facebook</a>
+                <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" style="display: block; margin: 10px 0; background: #1DA1F2; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">Twitter</a>
+                <button onclick="this.parentElement.parentElement.remove()" style="margin-top: 10px; padding: 10px; border: none; background: red; color: white; border-radius: 5px;">Close</button>
+            </div>
+        </div>
+    `
+    document.body.insertAdjacentHTML('beforeend', shareLinks);
 }
 
+/*
 function showShareOptions() {
     // Create share dialog
     const shareDialog = document.createElement('div');
@@ -185,6 +186,7 @@ function copyToClipboard() {
     document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
 }
 
+*/
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     createStars('stars', 1);
