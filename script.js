@@ -73,7 +73,7 @@ function createFloatingEmojis() {
     }
 }
 
-// Universal share function with Messenger support
+// Universal share function 
 function shareCard(e) {
     e.stopPropagation();
     
