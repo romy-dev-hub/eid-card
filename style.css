@@ -17,13 +17,13 @@ body {
 .card-container {
     position: relative;
     width: 90%;
-    max-width: 400px;
-    min-height: 70vh;
-    max-height: 600px;
+    max-width: 320px;
+    min-height: 60vh;
+    max-height: 500px;
     cursor: pointer;
     transition: transform 1s;
     transform-style: preserve-3d;
-    margin: 20px 0;
+    margin: 10px 0;
     z-index: 2;
 }
 
@@ -247,7 +247,6 @@ p {
     h1 { font-size: 2em; }
     p { font-size: 0.95em; }
     .card-front, .card-back { padding: 20px; }
-    .share-btn { padding: 6px 12px; font-size: 0.8em; }
 }
 
 @media (max-width: 480px) {
@@ -268,4 +267,51 @@ p {
     h1 { font-size: 1.8em; }
     p { font-size: 0.8em; }
     .mosque-silhouette { height: 20%; }
+}
+
+@media (max-width: 480px) {
+    .card-container {
+        max-width: 280px;
+        min-height: 55vh;
+    }
+
+    .crescent {
+        width: 25vw;
+        height: 25vw;
+        min-width: 80px;
+        min-height: 80px;
+        box-shadow: inset -10px 0px 0 0px #f8f9fa;
+    }
+
+    h1 {
+        font-size: 1.6em; /* Reduced from 1.8em */
+    }
+
+    p {
+        font-size: 0.8em; /* Reduced from 0.85em */
+    }
+
+    .mosque-silhouette {
+        height: 20%; /* Reduced from 25% */
+    }
+
+    .lantern {
+        width: 30px; /* Smaller lanterns */
+    }
+
+    .lantern-message {
+        font-size: 0.9em; /* Smaller messages */
+    }
+}
+
+/* Adjust for very small phones */
+@media (max-width: 360px) {
+    .card-container {
+        max-width: 250px;
+        min-height: 50vh;
+    }
+
+    h1 {
+        font-size: 1.4em;
+    }
 }
