@@ -229,12 +229,11 @@ function copyLink(){
 function copyLink() {
     const link = "https://romy-dev-hub.github.io/eid-card/";
 
-    // Modern clipboard API (Best for mobile & desktop)
+    // First, try modern API
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(link).then(() => {
-            showToast("✅ Link copied to clipboard!");
-        }).catch(err => {
-            console.error("Clipboard API failed:", err);
+            showToast("✅ Link copied!");
+        }).catch(() => {
             fallbackCopy(link);
         });
     } else {
@@ -242,35 +241,34 @@ function copyLink() {
     }
 }
 
-// Fallback for older browsers
+// Fallback for older devices
 function fallbackCopy(link) {
-    const tempInput = document.createElement('textarea'); // Use textarea for better support
+    const tempInput = document.createElement("textarea");
     tempInput.value = link;
     document.body.appendChild(tempInput);
+    tempInput.focus();
     tempInput.select();
-    document.execCommand("copy");
+    
+    const success = document.execCommand("copy");
     document.body.removeChild(tempInput);
 
-    showToast("✅ Link copied to clipboard!");
+    if (success) {
+        showToast("✅ Link copied!");
+    } else {
+        alert("⚠️ Copy failed! Try manually.");
+    }
 }
 
 // Toast message
 function showToast(message) {
-    const toast = document.createElement('div');
+    const toast = document.createElement("div");
     toast.textContent = message;
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%)';
-    toast.style.background = '#0a3d62';
-    toast.style.color = 'white';
-    toast.style.padding = '10px 20px';
-    toast.style.borderRadius = '20px';
-    toast.style.zIndex = '1000';
-    toast.style.fontSize = '16px';
-    toast.style.textAlign = 'center';
-    toast.style.minWidth = '200px';
-    
+    Object.assign(toast.style, {
+        position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)",
+        background: "#0a3d62", color: "white", padding: "10px 20px", borderRadius: "20px",
+        zIndex: "1000", fontSize: "16px", textAlign: "center", minWidth: "200px"
+    });
+
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
 }
