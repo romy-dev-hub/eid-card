@@ -183,7 +183,7 @@ p {
     color: #ffd700;
     font-family: 'Dancing Script', cursive;
     font-size: 1.4em;
-    text-shadow: 0 0 10px rgba(0,0,0,0.8);
+    text-shadow: 0 0 10px rgba(77, 77, 77, 0.8);
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
     max-width: 80%;
@@ -286,13 +286,6 @@ p {
         height: 20%; /* Reduced from 25% */
     }
 
-    .lantern {
-        width: 30px; /* Smaller lanterns */
-    }
-
-    .lantern-message {
-        font-size: 0.9em; /* Smaller messages */
-    }
 }
 
 /* Adjust for very small phones */
