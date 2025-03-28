@@ -191,7 +191,7 @@ function copyToClipboard() {
 
 */
 
-
+/*
 function copyLink(){
     const link = "https://romy-dev-hub.github.io/eid-card/";
 
@@ -224,7 +224,57 @@ function copyLink(){
     document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
 
 }
+*/
+
+function copyLink() {
+    const link = "https://romy-dev-hub.github.io/eid-card/";
+
+    // Modern clipboard API (Best for mobile & desktop)
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(link).then(() => {
+            showToast("✅ Link copied to clipboard!");
+        }).catch(err => {
+            console.error("Clipboard API failed:", err);
+            fallbackCopy(link);
+        });
+    } else {
+        fallbackCopy(link);
+    }
+}
+
+// Fallback for older browsers
+function fallbackCopy(link) {
+    const tempInput = document.createElement('textarea'); // Use textarea for better support
+    tempInput.value = link;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+
+    showToast("✅ Link copied to clipboard!");
+}
+
+// Toast message
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.position = 'fixed';
+    toast.style.bottom = '20px';
+    toast.style.left = '50%';
+    toast.style.transform = 'translateX(-50%)';
+    toast.style.background = '#0a3d62';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 20px';
+    toast.style.borderRadius = '20px';
+    toast.style.zIndex = '1000';
+    toast.style.fontSize = '16px';
+    toast.style.textAlign = 'center';
+    toast.style.minWidth = '200px';
     
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     createStars('stars', 1);
