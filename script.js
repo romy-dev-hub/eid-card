@@ -226,32 +226,34 @@ function copyLink(){
 }
 */
 
-function copyLink() {
+function copyLink(e) {
+    e.stopPropagation();
     const link = "https://romy-dev-hub.github.io/eid-card/";
-
-    // First, try modern API
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(link).then(() => {
-            showToast("✅ Link copied!");
-        }).catch((err) => {
-            fallbackCopy(link);
-        });
+    
+    // Try modern API first
+    if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(link)
+            .then(() => showToast("✅ Link copied!"))
+            .catch(() => iosCopyFallback(link));
     } else {
-        fallbackCopy(link);
+        iosCopyFallback(link);
     }
 }
 
-// Updated fallback for mobile devices
-function fallbackCopy(link) {
-    // Create a temporary visible input
+function iosCopyFallback(link) {
+    // Create temporary visible input
     const tempInput = document.createElement("input");
     tempInput.value = link;
-    tempInput.setAttribute("readonly", "");
-    tempInput.style.position = "absolute";
-    tempInput.style.left = "-9999px";
+    tempInput.style.position = "fixed";
+    tempInput.style.opacity = 0;
+    tempInput.style.pointerEvents = "none";
     document.body.appendChild(tempInput);
 
-    // Special handling for iOS
+    // Select and focus
+    tempInput.select();
+    tempInput.focus();
+    
+    // iOS specific selection
     if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
         const range = document.createRange();
         range.selectNodeContents(tempInput);
@@ -259,19 +261,52 @@ function fallbackCopy(link) {
         selection.removeAllRanges();
         selection.addRange(range);
         tempInput.setSelectionRange(0, 999999);
-    } else {
-        tempInput.select();
     }
 
     try {
+        // Execute copy
         const success = document.execCommand("copy");
-        if (!success) throw new Error('Copy failed');
-        showToast("✅ Link copied!");
+        
+        // Show appropriate feedback
+        if (success) {
+            showToast("✅ Link copied!");
+        } else {
+            showManualCopy(link);
+        }
     } catch (err) {
-        showToast("⚠️ Copy failed! Try manual copy.");
+        showManualCopy(link);
     } finally {
-        document.body.removeChild(tempInput);
+        // Cleanup after delay for iOS
+        setTimeout(() => {
+            document.body.removeChild(tempInput);
+            window.getSelection()?.removeAllRanges();
+        }, 500);
     }
+}
+
+function showManualCopy(link) {
+    const modal = document.createElement("div");
+    modal.innerHTML = `
+        <div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+            background:white; padding:20px; border-radius:10px; text-align:center;
+            box-shadow:0 0 20px rgba(0,0,0,0.2); z-index:10000;">
+            <p style="margin-bottom:15px;">📱 Tap and hold to copy:</p>
+            <input type="text" value="${link}" 
+                style="padding:10px; width:80%; margin-bottom:15px; border:1px solid #ccc;
+                border-radius:5px; font-size:14px;" readonly>
+            <button onclick="this.parentElement.remove()" 
+                style="padding:8px 20px; background:#0a3d62; color:white;
+                border:none; border-radius:5px; cursor:pointer;">
+                Close
+            </button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Auto-select text
+    const input = modal.querySelector("input");
+    input.select();
+    input.focus();
 }
 
 // Toast message
