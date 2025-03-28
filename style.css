@@ -17,9 +17,9 @@ body {
 .card-container {
     position: relative;
     width: 90%;
-    max-width: 320px;
-    min-height: 60vh;
-    max-height: 500px;
+    max-width: 400px; /* Increased from 320px */
+    min-height: 70vh; /* Increased from 60vh */
+    max-height: 600px; /* Increased from 500px */
     cursor: pointer;
     transition: transform 1s;
     transform-style: preserve-3d;
@@ -71,14 +71,14 @@ body {
 }
 
 .crescent {
-    width: 20vw;
-    height: 20vw;
-    min-width: 100px;
-    min-height: 100px;
+    width: 25vw; /* Increased from 20vw */
+    height: 25vw; /* Increased from 20vw */
+    min-width: 120px; /* Increased from 100px */
+    min-height: 120px; /* Increased from 100px */
     background: transparent;
     border-radius: 50%;
-    box-shadow: inset -15px 0px 0 0px #f8f9fa;
-    margin-bottom: 20px;
+    box-shadow: inset -18px 0px 0 0px #f8f9fa; /* Increased shadow size */
+    margin-bottom: 25px; /* Increased from 20px */
     animation: float 3s ease-in-out infinite;
     position: relative;
     z-index: 3;
@@ -125,14 +125,14 @@ body {
 }
 
 h1 {
-    font-size: 2.5em;
-    margin-bottom: 15px;
+    font-size: 2.8em; /* Increased from 2.5em */
+    margin-bottom: 20px; /* Increased from 15px */
     color: #0a3d62;
     font-family: 'Dancing Script', cursive;
 }
 
 p {
-    font-size: 1.1em;
+    font-size: 1.2em; /* Increased from 1.1em */
     line-height: 1.6;
 }
 
@@ -235,17 +235,17 @@ p {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    h1 { font-size: 2em; }
-    p { font-size: 0.95em; }
+    h1 { font-size: 2.3em; } /* Increased from 2em */
+    p { font-size: 1.05em; } /* Increased from 0.95em */
     .card-front, .card-back { padding: 20px; }
 }
 
 @media (max-width: 480px) {
-    h1 { font-size: 1.8em; }
-    p { font-size: 0.85em; }
+    h1 { font-size: 2em; } /* Increased from 1.8em */
+    p { font-size: 0.95em; } /* Increased from 0.85em */
     .crescent {
-        box-shadow: inset -12px 0px 0 0px #f8f9fa;
-        margin-bottom: 15px;
+        box-shadow: inset -15px 0px 0 0px #f8f9fa; /* Increased from -12px */
+        margin-bottom: 20px; /* Increased from 15px */
     }
     .mosque-silhouette { height: 25%; }
 }
@@ -295,7 +295,5 @@ p {
         min-height: 50vh;
     }
 
-    h1 {
-        font-size: 1.4em;
-    }
+    h1 { font-size: 1.8em; } /* Increased from 1.4em */
 }

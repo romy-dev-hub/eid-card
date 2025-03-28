@@ -57,7 +57,7 @@ function flipCard() {
 // Floating emojis for background
 function createFloatingEmojis() {
     const emojiContainer = document.getElementById('emojiBackground');
-    const emojis = ['🌙', '🌟', '✨', '🕌', '☪️', '🕋', '🪔'];
+    const emojis = ['🌙', '🌟', '✨', '🪔'];
     const emojiCount = window.innerWidth < 768 ? 15 : 25;
 
     for (let i = 0; i < emojiCount; i++) {
