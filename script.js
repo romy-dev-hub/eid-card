@@ -74,7 +74,7 @@ function createFloatingEmojis() {
 }
 
 // Universal share function 
-//failed to solve the error of sharing
+//failed to solve the error of sharing and copying as well
 /*
 function shareCard() {
     const text = encodeURIComponent('Eid Mubarak! Wishing you a blessed Eid');
@@ -224,7 +224,7 @@ function copyLink(){
     document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
 
 }
-*/
+
 
 function copyLink(e) {
     e.stopPropagation();
@@ -322,7 +322,7 @@ function showToast(message) {
     document.body.appendChild(toast);
     setTimeout(() => toast.remove(), 3000);
 }
-
+*/
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     createStars('stars', 1);

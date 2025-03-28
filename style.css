@@ -144,27 +144,6 @@ p {
     z-index: 1;
 }
 
-.share-btn {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    background: #0a3d62;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 20px;
-    cursor: pointer;
-    z-index: 3;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.9em;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.share-btn:hover {
-    background: #1e5799;
-}
 
 .emoji-background {
     position: fixed;
