@@ -73,256 +73,6 @@ function createFloatingEmojis() {
     }
 }
 
-// Universal share function 
-//failed to solve the error of sharing and copying as well
-/*
-function shareCard() {
-    const text = encodeURIComponent('Eid Mubarak! Wishing you a blessed Eid');
-    const url = encodeURIComponent(window.location.href);
-
-    //show a popup with share options
-    const shareLinks = `
-       <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
-            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; padding: 20px;">
-                <h3 style="margin-bottom: 15px; color: #0a3d62;">Share Eid Greetings</h3>
-                <a href="https://wa.me/?text=${text}%20${url}" target="_blank" style="display: block; margin: 10px 0; background: #25D366; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">WhatsApp</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" style="display: block; margin: 10px 0; background: #4267B2; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">Facebook</a>
-                <a href="https://twitter.com/intent/tweet?text=${text}&url=${url}" target="_blank" style="display: block; margin: 10px 0; background: #1DA1F2; padding: 10px; color: white; text-decoration: none; border-radius: 5px;">Twitter</a>
-                <button onclick="this.parentElement.parentElement.remove()" style="margin-top: 10px; padding: 10px; border: none; background: red; color: white; border-radius: 5px;">Close</button>
-            </div>
-        </div>
-    `
-    document.body.insertAdjacentHTML('beforeend', shareLinks);
-}
-*/
-
-/*
-function showShareOptions() {
-    // Create share dialog
-    const shareDialog = document.createElement('div');
-    shareDialog.style.position = 'fixed';
-    shareDialog.style.top = '0';
-    shareDialog.style.left = '0';
-    shareDialog.style.width = '100%';
-    shareDialog.style.height = '100%';
-    shareDialog.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    shareDialog.style.zIndex = '1000';
-    shareDialog.style.display = 'flex';
-    shareDialog.style.flexDirection = 'column';
-    shareDialog.style.justifyContent = 'center';
-    shareDialog.style.alignItems = 'center';
-
-    shareDialog.innerHTML = `
-        <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; width: 80%; max-width: 300px;">
-            <h3 style="color: #0a3d62; margin-bottom: 15px; font-size: 1.2rem;">Share Eid Greetings</h3>
-            <button onclick="shareVia('whatsapp')" style="background: #25D366; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
-                <i class="fab fa-whatsapp"></i> WhatsApp
-            </button>
-            <button onclick="shareVia('messenger')" style="background: #006AFF; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
-                <i class="fab fa-facebook-messenger"></i> Messenger
-            </button>
-            <button onclick="shareVia('facebook')" style="background: #4267B2; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
-                <i class="fab fa-facebook"></i> Facebook
-            </button>
-            <button onclick="copyToClipboard()" style="background: #0a3d62; color: white; border: none; padding: 12px; border-radius: 8px; margin: 8px 0; width: 100%; font-size: 1rem; cursor: pointer;">
-                <i class="fas fa-copy"></i> Copy Link
-            </button>
-            <button onclick="this.parentElement.parentElement.remove()" style="background: #e74c3c; color: white; border: none; padding: 12px; border-radius: 8px; margin-top: 15px; width: 100%; font-size: 1rem; cursor: pointer;">
-                Close
-            </button>
-        </div>
-    `;
-
-    document.body.appendChild(shareDialog);
-}
-
-function shareVia(platform) {
-    const text = 'Eid Mubarak! 🌙 Wishing you a blessed Eid. Check this greeting card: ';
-    const url = window.location.href;
-    
-    let shareUrl;
-    switch(platform) {
-        case 'whatsapp':
-            shareUrl = `https://wa.me/?text=${encodeURIComponent(text + url)}`;
-            break;
-        case 'messenger':
-            shareUrl = `fb-messenger://share/?link=${encodeURIComponent(url)}`;
-            // Fallback to Facebook if Messenger app not installed
-            setTimeout(() => {
-                if (!document.hidden) {
-                    window.open(`https://www.facebook.com/dialog/send?link=${encodeURIComponent(url)}&redirect_uri=${encodeURIComponent(url)}`, '_blank');
-                }
-            }, 250);
-            break;
-        case 'facebook':
-            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
-            break;
-    }
-
-    window.open(shareUrl, '_blank');
-    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
-}
-
-
-function copyToClipboard() {
-    const dummy = document.createElement('textarea');
-    dummy.value = window.location.href;
-    document.body.appendChild(dummy);
-    dummy.select();
-    document.execCommand('copy');
-    document.body.removeChild(dummy);
-    
-    const toast = document.createElement('div');
-    toast.textContent = 'Link copied to clipboard!';
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%)';
-    toast.style.background = '#0a3d62';
-    toast.style.color = 'white';
-    toast.style.padding = '10px 20px';
-    toast.style.borderRadius = '20px';
-    toast.style.zIndex = '1000';
-    document.body.appendChild(toast);
-    
-    setTimeout(() => toast.remove(), 3000);
-    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
-}
-
-*/
-
-/*
-function copyLink(){
-    const link = "https://romy-dev-hub.github.io/eid-card/";
-
-    //create temp input element
-    const tempInput = document.createElement('input');
-    tempInput.value = link;
-    document.body.appendChild(tempInput);
-
-    //select and copy the link
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999);
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-
-    //show a confirmation message
-    const toast = document.createElement('div');
-    toast.textContent = 'Link copied to clipboard!';
-    toast.style.position = 'fixed';
-    toast.style.bottom = '20px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%)';
-    toast.style.background = '#0a3d62';
-    toast.style.color = 'white';
-    toast.style.padding = '10px 20px';
-    toast.style.borderRadius = '20px';
-    toast.style.zIndex = '1000';
-    document.body.appendChild(toast);
-    
-    setTimeout(() => toast.remove(), 3000);
-    document.querySelector('div[style*="position: fixed; top: 0"]')?.remove();
-
-}
-
-
-function copyLink(e) {
-    e.stopPropagation();
-    const link = "https://romy-dev-hub.github.io/eid-card/";
-    
-    // Try modern API first
-    if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(link)
-            .then(() => showToast("✅ Link copied!"))
-            .catch(() => iosCopyFallback(link));
-    } else {
-        iosCopyFallback(link);
-    }
-}
-
-function iosCopyFallback(link) {
-    // Create temporary visible input
-    const tempInput = document.createElement("input");
-    tempInput.value = link;
-    tempInput.style.position = "fixed";
-    tempInput.style.opacity = 0;
-    tempInput.style.pointerEvents = "none";
-    document.body.appendChild(tempInput);
-
-    // Select and focus
-    tempInput.select();
-    tempInput.focus();
-    
-    // iOS specific selection
-    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
-        const range = document.createRange();
-        range.selectNodeContents(tempInput);
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-        tempInput.setSelectionRange(0, 999999);
-    }
-
-    try {
-        // Execute copy
-        const success = document.execCommand("copy");
-        
-        // Show appropriate feedback
-        if (success) {
-            showToast("✅ Link copied!");
-        } else {
-            showManualCopy(link);
-        }
-    } catch (err) {
-        showManualCopy(link);
-    } finally {
-        // Cleanup after delay for iOS
-        setTimeout(() => {
-            document.body.removeChild(tempInput);
-            window.getSelection()?.removeAllRanges();
-        }, 500);
-    }
-}
-
-function showManualCopy(link) {
-    const modal = document.createElement("div");
-    modal.innerHTML = `
-        <div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-            background:white; padding:20px; border-radius:10px; text-align:center;
-            box-shadow:0 0 20px rgba(0,0,0,0.2); z-index:10000;">
-            <p style="margin-bottom:15px;">📱 Tap and hold to copy:</p>
-            <input type="text" value="${link}" 
-                style="padding:10px; width:80%; margin-bottom:15px; border:1px solid #ccc;
-                border-radius:5px; font-size:14px;" readonly>
-            <button onclick="this.parentElement.remove()" 
-                style="padding:8px 20px; background:#0a3d62; color:white;
-                border:none; border-radius:5px; cursor:pointer;">
-                Close
-            </button>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    
-    // Auto-select text
-    const input = modal.querySelector("input");
-    input.select();
-    input.focus();
-}
-
-// Toast message
-function showToast(message) {
-    const toast = document.createElement("div");
-    toast.textContent = message;
-    Object.assign(toast.style, {
-        position: "fixed", bottom: "20px", left: "50%", transform: "translateX(-50%)",
-        background: "#0a3d62", color: "white", padding: "10px 20px", borderRadius: "20px",
-        zIndex: "1000", fontSize: "16px", textAlign: "center", minWidth: "200px"
-    });
-
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-}
-*/
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     createStars('stars', 1);
@@ -335,3 +85,73 @@ document.querySelector('.card-container').addEventListener('touchstart', functio
     e.preventDefault();
     flipCard();
 }, { passive: false });
+
+const wishes = [
+    "Blessed Eid!",
+    "Eid Mubarak! 🌙",
+    "May Allah bless you!",
+    "Joyous Celebration!",
+    "Peace & Happiness!",
+    "Eid Kareem! ✨"
+];
+
+function createLantern(x, y) {
+    const container = document.getElementById('lanternContainer');
+    
+    // Create lantern
+    const lantern = document.createElement('div');
+    lantern.className = 'lantern';
+    lantern.innerHTML = '🪔';
+    lantern.style.left = `${x}px`;
+    lantern.style.top = `${y}px`;
+    
+    // Create message
+    const message = document.createElement('div');
+    message.className = 'lantern-message';
+    message.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+    message.style.left = `${x + 20}px`;
+    message.style.top = `${y - 30}px`;
+    
+    container.appendChild(lantern);
+    container.appendChild(message);
+    
+    // Start animations
+    setTimeout(() => {
+        lantern.style.opacity = '1';
+        message.style.opacity = '1';
+    }, 50);
+
+    // Remove elements after animation
+    setTimeout(() => {
+        lantern.remove();
+        message.remove();
+    }, 15000);
+}
+
+// Add click/touch handler
+document.querySelector('.card-back').addEventListener('click', (e) => {
+    if (!document.querySelector('.card-container').classList.contains('flipped')) return;
+    
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    createLantern(x, y);
+});
+
+// Add mobile touch support
+let touchTimer;
+document.querySelector('.card-back').addEventListener('touchstart', (e) => {
+    touchTimer = setTimeout(() => {
+        const touch = e.touches[0];
+        const rect = e.target.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        createLantern(x, y);
+    }, 100);
+});
+
+document.querySelector('.card-back').addEventListener('touchend', () => {
+    clearTimeout(touchTimer);
+});

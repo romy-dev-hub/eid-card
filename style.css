@@ -166,6 +166,43 @@ p {
     transform: translate(-50%, -50%);
 }
 
+.lantern-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lantern {
+    position: absolute;
+    cursor: pointer;
+    animation: floatUp 15s linear forwards;
+    filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.5));
+    width: 40px;
+    opacity: 0;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.2);
+        opacity: 0;
+    }
+}
+
+.lantern-message {
+    position: absolute;
+    color: #ffd700;
+    font-family: 'Dancing Script', cursive;
+    white-space: nowrap;
+    font-size: 1.2em;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
 @keyframes floatEmoji {
     0%, 100% {
         transform: translate(-50%, -50%) rotate(0deg) scale(var(--scale));
