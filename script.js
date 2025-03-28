@@ -233,7 +233,7 @@ function copyLink() {
     if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(link).then(() => {
             showToast("✅ Link copied!");
-        }).catch(() => {
+        }).catch((err) => {
             fallbackCopy(link);
         });
     } else {
@@ -241,21 +241,36 @@ function copyLink() {
     }
 }
 
-// Fallback for older devices
+// Updated fallback for mobile devices
 function fallbackCopy(link) {
-    const tempInput = document.createElement("textarea");
+    // Create a temporary visible input
+    const tempInput = document.createElement("input");
     tempInput.value = link;
+    tempInput.setAttribute("readonly", "");
+    tempInput.style.position = "absolute";
+    tempInput.style.left = "-9999px";
     document.body.appendChild(tempInput);
-    tempInput.focus();
-    tempInput.select();
-    
-    const success = document.execCommand("copy");
-    document.body.removeChild(tempInput);
 
-    if (success) {
-        showToast("✅ Link copied!");
+    // Special handling for iOS
+    if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+        const range = document.createRange();
+        range.selectNodeContents(tempInput);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        tempInput.setSelectionRange(0, 999999);
     } else {
-        alert("⚠️ Copy failed! Try manually.");
+        tempInput.select();
+    }
+
+    try {
+        const success = document.execCommand("copy");
+        if (!success) throw new Error('Copy failed');
+        showToast("✅ Link copied!");
+    } catch (err) {
+        showToast("⚠️ Copy failed! Try manual copy.");
+    } finally {
+        document.body.removeChild(tempInput);
     }
 }
 
