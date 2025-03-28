@@ -95,63 +95,36 @@ const wishes = [
     "Eid Kareem! ✨"
 ];
 
-function createLantern(x, y) {
-    const container = document.getElementById('lanternContainer');
-    
-    // Create lantern
-    const lantern = document.createElement('div');
-    lantern.className = 'lantern';
-    lantern.innerHTML = '🪔';
-    lantern.style.left = `${x}px`;
-    lantern.style.top = `${y}px`;
-    
-    // Create message
-    const message = document.createElement('div');
-    message.className = 'lantern-message';
-    message.textContent = wishes[Math.floor(Math.random() * wishes.length)];
-    message.style.left = `${x + 20}px`;
-    message.style.top = `${y - 30}px`;
-    
-    container.appendChild(lantern);
-    container.appendChild(message);
-    
-    // Start animations
-    setTimeout(() => {
-        lantern.style.opacity = '1';
-        message.style.opacity = '1';
-    }, 50);
+// Initialize wish index
+let currentWishIndex = -1;
 
-    // Remove elements after animation
+function showNextWish() {
+    const wishElement = document.getElementById('wishText');
+    
+    // Fade out current wish
+    wishElement.classList.remove('visible');
+    
     setTimeout(() => {
-        lantern.remove();
-        message.remove();
-    }, 15000);
+        // Update wish index
+        currentWishIndex = (currentWishIndex + 1) % wishes.length;
+        
+        // Update text and fade in
+        wishElement.textContent = wishes[currentWishIndex];
+        wishElement.classList.add('visible');
+    }, 500); // Match transition duration
 }
 
-// Add click/touch handler
-document.querySelector('.card-back').addEventListener('click', (e) => {
-    if (!document.querySelector('.card-container').classList.contains('flipped')) return;
-    
-    const rect = e.target.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    createLantern(x, y);
+// Add click/touch handler to card back
+document.querySelector('.card-back').addEventListener('click', function(e) {
+    if (document.querySelector('.card-container').classList.contains('flipped')) {
+        showNextWish();
+    }
 });
 
-// Add mobile touch support
-let touchTimer;
-document.querySelector('.card-back').addEventListener('touchstart', (e) => {
-    touchTimer = setTimeout(() => {
-        const touch = e.touches[0];
-        const rect = e.target.getBoundingClientRect();
-        const x = touch.clientX - rect.left;
-        const y = touch.clientY - rect.top;
-        
-        createLantern(x, y);
-    }, 100);
-});
-
-document.querySelector('.card-back').addEventListener('touchend', () => {
-    clearTimeout(touchTimer);
-});
+// Mobile touch support
+document.querySelector('.card-back').addEventListener('touchstart', function(e) {
+    if (document.querySelector('.card-container').classList.contains('flipped')) {
+        e.preventDefault();
+        showNextWish();
+    }
+}, { passive: false });
